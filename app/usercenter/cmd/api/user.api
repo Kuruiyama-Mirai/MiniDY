@@ -1,0 +1,85 @@
+syntax = "v1"
+
+info(
+	title:  "用户信息"
+	desc:   "用户信息"
+	author: "px"
+	email: "1780759836@qq.com"
+	version:    "1"
+)
+
+type User {
+	Id               int64  `json:"id"`
+	Username         string `json:"username"`
+	Follow_count     int64  `json:"follow_count"`
+	Follower_count   int64  `json:"follower_count"`
+	Is_follow        bool   `json:"is_follow"`
+	Avatar           string `json:"avatar"`
+	Background_image string `json:"background_image"`
+	Signature        string `json:"signature"`
+	Total_favorited  int64  `json:"total_favorited"`
+	Work_count       int64  `json:"work_count"`
+	Favorite_count   int64  `json:"favorite_count"`
+}
+
+//注册请求
+type (
+	RegisterReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	RegisterResp {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+		UserID     int64  `json:"user_id"`
+		Token      string `json:"token"`
+	}
+)
+//登录请求
+type (
+	LoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	LoginResp {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+		UserID     int64  `json:"user_id"`
+		Token      string `json:"token"`
+	}
+)
+//信息请求
+type (
+	GetUserInfoReq {
+		UserID int64  `json:"user_id"`
+		Token  string `json:"token"`
+	}
+	GetUserInfoResp {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+		UserInfo   User   `json:"userInfo"`
+	}
+)
+//注册跟登录应该不需要Jwt验证吧 虽然它要返回Token
+@server(
+	prefix: douyin/
+)
+service usercenter{
+	
+	@handler register
+	post /user/register (RegisterReq) returns (RegisterResp)
+	
+	@handler login
+	post /user/login (LoginReq) returns (LoginResp)
+}
+
+//查看信息是需要Token的
+@server(
+	prefix: douyin/
+	jwt: JwtAuth
+)
+service usercenter{
+	
+	@handler userinfo
+	post /user (GetUserInfoReq) returns (GetUserInfoResp)
+}

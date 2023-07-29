@@ -1,0 +1,45 @@
+Name: user.rpc
+Mode: dev
+ListenOn: 0.0.0.0:8080
+
+# #etcd链接服务方式  鉴于本机安装ETCD不如直连方便 因此使用Endpoints直连 
+# Etcd:
+#   Hosts:
+#   - 127.0.0.1:2379
+#   Key: user.rpc
+
+#服务监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 5001
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: usercenter-rpc
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+#jwt验证
+JwtAuth:
+  AccessSecret: shushuwoyazhendeyaojile
+  AccessExpire: 31536000
+
+#日志
+Log:
+  ServiceName: usercenter-rpc
+  Level: error
+#缓存
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Key: usercenter-rpc
+
+Cache:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node
+#数据库
+DB:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/minidy?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai

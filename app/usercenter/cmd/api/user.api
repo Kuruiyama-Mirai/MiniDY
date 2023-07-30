@@ -51,8 +51,8 @@ type (
 //信息请求
 type (
 	GetUserInfoReq {
-		UserID int64  `json:"user_id"`
-		Token  string `json:"token"`
+		UserID int64 `json:"user_id"`
+		//Token  string `json:"token"`
 	}
 	GetUserInfoResp {
 		StatusCode int32  `json:"status_code"`

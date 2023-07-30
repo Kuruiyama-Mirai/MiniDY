@@ -40,8 +40,7 @@ type LoginResp struct {
 }
 
 type GetUserInfoReq struct {
-	UserID int64  `json:"user_id"`
-	Token  string `json:"token"`
+	UserID int64 `json:"user_id"`
 }
 
 type GetUserInfoResp struct {

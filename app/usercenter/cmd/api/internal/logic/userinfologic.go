@@ -28,15 +28,15 @@ func NewUserinfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Userinfo
 
 func (l *UserinfoLogic) Userinfo(req *types.GetUserInfoReq) (*types.GetUserInfoResp, error) {
 	// todo: add your logic here and delete this line
+
 	userInfoResp, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &pb.DouyinUserRequest{
 		UserId: req.UserID,
-		Token:  req.Token,
 	})
 	if err != nil {
 		return nil, err
 	}
 	var userInfo types.User
-	_ = copier.Copy(&userInfo, userInfoResp)
+	_ = copier.Copy(&userInfo, userInfoResp.User)
 
 	return &types.GetUserInfoResp{
 		StatusCode: int32(dyerr.OK),

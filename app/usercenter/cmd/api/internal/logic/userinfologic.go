@@ -2,10 +2,12 @@ package logic
 
 import (
 	"context"
+	"errors"
 
 	"MiniDY/app/usercenter/cmd/api/internal/svc"
 	"MiniDY/app/usercenter/cmd/api/internal/types"
 	"MiniDY/app/usercenter/cmd/rpc/pb"
+	"MiniDY/common/ctxdata"
 	"MiniDY/common/dyerr"
 
 	"github.com/jinzhu/copier"
@@ -28,9 +30,13 @@ func NewUserinfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Userinfo
 
 func (l *UserinfoLogic) Userinfo(req *types.GetUserInfoReq) (*types.GetUserInfoResp, error) {
 	// todo: add your logic here and delete this line
-
+	userId := ctxdata.GetUidFromCtx(l.ctx)
+	var err error
+	if userId != req.UserID {
+		return nil, errors.New("当前请求的用户信息并未验证")
+	}
 	userInfoResp, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &pb.DouyinUserRequest{
-		UserId: req.UserID,
+		UserId: userId,
 	})
 	if err != nil {
 		return nil, err

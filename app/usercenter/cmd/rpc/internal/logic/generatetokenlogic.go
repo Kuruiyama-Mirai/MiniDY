@@ -6,6 +6,7 @@ import (
 
 	"MiniDY/app/usercenter/cmd/rpc/internal/svc"
 	"MiniDY/app/usercenter/cmd/rpc/pb"
+	"MiniDY/common/ctxdata"
 	"MiniDY/common/dyerr"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -46,7 +47,7 @@ func (l *GenerateTokenLogic) getJwtToken(secretKey string, iat, seconds, userId 
 	claims := make(jwt.MapClaims)
 	claims["exp"] = iat + seconds
 	claims["iat"] = iat
-	claims["id"] = userId
+	claims[ctxdata.CtxKeyJwtUserId] = userId
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims
 	return token.SignedString([]byte(secretKey))

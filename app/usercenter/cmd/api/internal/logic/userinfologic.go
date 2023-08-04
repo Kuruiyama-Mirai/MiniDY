@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"errors"
 
 	"MiniDY/app/usercenter/cmd/api/internal/svc"
 	"MiniDY/app/usercenter/cmd/api/internal/types"
@@ -33,13 +32,19 @@ func (l *UserinfoLogic) Userinfo(req *types.GetUserInfoReq) (*types.GetUserInfoR
 	userId := ctxdata.GetUidFromCtx(l.ctx)
 	var err error
 	if userId != req.UserID {
-		return nil, errors.New("当前请求的用户信息并未验证")
+		return &types.GetUserInfoResp{
+			StatusCode: 1,
+			StatusMsg:  "当前用户未认证",
+		}, nil
 	}
 	userInfoResp, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &pb.DouyinUserRequest{
 		UserId: userId,
 	})
 	if err != nil {
-		return nil, err
+		return &types.GetUserInfoResp{
+			StatusCode: 1,
+			StatusMsg:  "查询用户详情失败" + err.Error(),
+		}, nil
 	}
 	var userInfo types.User
 	_ = copier.Copy(&userInfo, userInfoResp.User)

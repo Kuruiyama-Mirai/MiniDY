@@ -32,7 +32,10 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (*types.RegisterResp, e
 		Password: req.Password,
 	})
 	if err != nil {
-		return nil, err
+		return &types.RegisterResp{
+			StatusCode: 1,
+			StatusMsg:  "注册失败" + err.Error(),
+		}, nil
 	}
 
 	return &types.RegisterResp{

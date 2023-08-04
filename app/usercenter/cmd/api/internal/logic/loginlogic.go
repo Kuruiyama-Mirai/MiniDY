@@ -32,7 +32,10 @@ func (l *LoginLogic) Login(req *types.LoginReq) (*types.LoginResp, error) {
 		Password: req.Password,
 	})
 	if err != nil {
-		return nil, err
+		return &types.LoginResp{
+			StatusCode: 1,
+			StatusMsg:  "登录失败" + err.Error(),
+		}, nil
 	}
 
 	return &types.LoginResp{

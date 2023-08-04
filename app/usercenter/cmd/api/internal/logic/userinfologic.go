@@ -44,6 +44,7 @@ func (l *UserinfoLogic) Userinfo(req *types.GetUserInfoReq) (*types.GetUserInfoR
 		return &types.GetUserInfoResp{
 			StatusCode: 1,
 			StatusMsg:  "查询用户详情失败" + err.Error(),
+			UserInfo:   types.User{},
 		}, nil
 	}
 	var userInfo types.User
@@ -51,7 +52,7 @@ func (l *UserinfoLogic) Userinfo(req *types.GetUserInfoReq) (*types.GetUserInfoR
 
 	return &types.GetUserInfoResp{
 		StatusCode: int32(dyerr.OK),
-		StatusMsg:  dyerr.SUCCESS,
+		StatusMsg:  "查看用户信息" + dyerr.SUCCESS,
 		UserInfo:   userInfo,
 	}, nil
 

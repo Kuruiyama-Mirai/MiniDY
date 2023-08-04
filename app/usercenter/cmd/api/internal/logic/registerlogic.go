@@ -35,12 +35,14 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (*types.RegisterResp, e
 		return &types.RegisterResp{
 			StatusCode: 1,
 			StatusMsg:  "注册失败" + err.Error(),
+			UserID:     -1,
+			Token:      "",
 		}, nil
 	}
 
 	return &types.RegisterResp{
 		StatusCode: int32(dyerr.OK),
-		StatusMsg:  dyerr.SUCCESS,
+		StatusMsg:  "注册" + dyerr.SUCCESS,
 		UserID:     registerResp.UserId,
 		Token:      registerResp.Token,
 	}, nil

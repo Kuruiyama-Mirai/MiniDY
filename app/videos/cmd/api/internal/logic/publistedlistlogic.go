@@ -38,6 +38,7 @@ func (l *PublistedListLogic) PublistedList(req *types.PublishedVideoListReq) (*t
 		return &types.PublishedVideoListResp{
 			StatusCode: 1,
 			StatusMsg:  "当前用户未认证",
+			List:       nil,
 		}, nil
 	}
 

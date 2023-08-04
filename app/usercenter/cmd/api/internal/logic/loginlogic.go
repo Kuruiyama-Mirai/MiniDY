@@ -35,12 +35,14 @@ func (l *LoginLogic) Login(req *types.LoginReq) (*types.LoginResp, error) {
 		return &types.LoginResp{
 			StatusCode: 1,
 			StatusMsg:  "登录失败" + err.Error(),
+			UserID:     -1,
+			Token:      "",
 		}, nil
 	}
 
 	return &types.LoginResp{
 		StatusCode: int32(dyerr.OK),
-		StatusMsg:  dyerr.SUCCESS,
+		StatusMsg:  "登录" + dyerr.SUCCESS,
 		UserID:     loginResp.UserId,
 		Token:      loginResp.Token,
 	}, nil

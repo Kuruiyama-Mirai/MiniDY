@@ -9,7 +9,6 @@ import (
 	"MiniDY/common/dyerr"
 
 	"github.com/jinzhu/copier"
-	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -33,7 +32,12 @@ func (l *VideofeedLogic) Videofeed(req *types.VideGetFeedReq) (*types.VideGetFee
 		LatestTime: req.LatestTime,
 	})
 	if err != nil {
-		return nil, errors.Wrapf(dyerr.NewErrMsg("Failed to get video list"), "Failed to get video list err : %v ,req:%+v", err, req)
+		return &types.VideGetFeedResp{
+			StatusCode: -1,
+			StatusMsg:  "获取视频列表失败" + err.Error(),
+			NextTime:   -1,
+			List:       nil,
+		}, nil
 	}
 
 	var videoList []types.Video
@@ -47,7 +51,7 @@ func (l *VideofeedLogic) Videofeed(req *types.VideGetFeedReq) (*types.VideGetFee
 	}
 	return &types.VideGetFeedResp{
 		StatusCode: int32(dyerr.OK),
-		StatusMsg:  dyerr.SUCCESS,
+		StatusMsg:  "查看投稿列表" + dyerr.SUCCESS,
 		NextTime:   resp.NextTime,
 		List:       videoList,
 	}, nil

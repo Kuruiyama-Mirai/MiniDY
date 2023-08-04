@@ -2,6 +2,8 @@ Name: video
 Host: 0.0.0.0
 Mode: dev
 Port: 8882
+MaxBytes: 372173912
+
 
 JwtAuth:
   AccessSecret: shushuwoyazhendeyaojile
@@ -22,6 +24,11 @@ Telemetry:
 Log:
   ServiceName: video-api
   Level: error
+
+#数据库
+DB:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/minidy?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
 
 #rpc服务 采用endpoints直连方式
 VideoRpcConf:

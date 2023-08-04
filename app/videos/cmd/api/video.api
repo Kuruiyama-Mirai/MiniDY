@@ -47,7 +47,7 @@ type (
 //发布视频
 type (
 	PublishVideoReq {
-		Data  byte   `json:"data"`
+		//Data  file `json:"data"`
 		Title string `json:"title"`
 	}
 	PublishVideoResp {
@@ -80,6 +80,7 @@ service video{
 //有关用户的需要Jwt认证
 @server(
 	prefix: douyin/publish
+	jwt: JwtAuth
 )
 service video{
 	

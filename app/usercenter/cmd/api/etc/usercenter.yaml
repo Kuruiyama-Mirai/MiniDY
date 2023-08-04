@@ -1,7 +1,7 @@
 Name: usercenter
 Host: 0.0.0.0
 Mode: dev
-Port: 8888
+Port: 8881
 
 
 JwtAuth:
@@ -10,7 +10,7 @@ JwtAuth:
 #服务监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 4008
+  Port: 5002
   Path: /metrics
 
 #链路追踪

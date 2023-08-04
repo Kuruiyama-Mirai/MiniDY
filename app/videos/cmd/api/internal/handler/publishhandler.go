@@ -25,7 +25,7 @@ func publishHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		//往logic里传递req
 		l := logic.NewPublishLogic(r.Context(), svcCtx)
-		resp, err := l.Publish(&req, file, fileHeader.Filename)
+		resp, err := l.Publish(&req, file, fileHeader)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

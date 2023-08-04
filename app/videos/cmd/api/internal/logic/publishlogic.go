@@ -7,6 +7,7 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"MiniDY/app/videos/cmd/api/internal/svc"
@@ -14,6 +15,7 @@ import (
 	"MiniDY/app/videos/model"
 	"MiniDY/common/ctxdata"
 	"MiniDY/common/dyerr"
+	"MiniDY/common/tool"
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -34,15 +36,34 @@ func NewPublishLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PublishLo
 	}
 }
 
-func (l *PublishLogic) Publish(req *types.PublishVideoReq, file multipart.File, fileName string) (*types.PublishVideoResp, error) {
+func (l *PublishLogic) Publish(req *types.PublishVideoReq, file multipart.File, fileheader *multipart.FileHeader) (*types.PublishVideoResp, error) {
 	// todo: add your logic here and delete this line
 	//从上下文ctx拿到UserID
 	userId := ctxdata.GetUidFromCtx(l.ctx)
 
-	// 生成一个唯一的文件名
-	timestamp := time.Now()
-	fileName += fmt.Sprintf("%v-%v", req.Title, timestamp)
+	//校验文件
+	fileName := fileheader.Filename
+	indexOfDot := strings.LastIndex(fileName, ".")
+	if indexOfDot < 0 {
+		return &types.PublishVideoResp{
+			StatusCode: 1,
+			StatusMsg:  "没有获取到文件的后缀名",
+		}, nil
+	}
+	suffix := fileName[indexOfDot+1:] //获取后缀名
+	suffix = strings.ToLower(suffix)  //后缀名统一小写处理
 
+	if !tool.CheckVideoType(suffix) {
+		return &types.PublishVideoResp{
+			StatusCode: 1,
+			StatusMsg:  "文件格式不支持",
+		}, nil
+	}
+	// 生成一个新的唯一的文件名
+	t := time.Now()
+	fileName = fmt.Sprintf("MiniDY/%4d/%02d/%02d/", t.Year(), t.Month(), t.Day()) + req.Title + "." + suffix
+	// 生成封面名
+	coverName := fmt.Sprintf("tiktok/%4d/%02d/%02d/cover/", t.Year(), t.Month(), t.Day()) + req.Title + ".pdf"
 	//文件保存路径 暂定为本地
 	savePath := filepath.Join("VideoData", fileName)
 	// 创建保存文件的目录
@@ -76,6 +97,7 @@ func (l *PublishLogic) Publish(req *types.PublishVideoReq, file multipart.File, 
 		video.Title = req.Title
 		video.AuthorId = userId
 		video.PlayUrl = savePath
+		video.CoverUrl = coverName
 
 		insertResult, err := l.svcCtx.VideoModel.Insert(l.ctx, video)
 		if err != nil {

@@ -36,7 +36,7 @@ func (l *GetVideoFeedLogic) GetVideoFeed(in *pb.DouyinFeedRequest) (*pb.DouyinFe
 	if in.LatestTime == 0 {
 		in.LatestTime = time.Now().Unix()
 	}
-	whereBuilder := l.svcCtx.VideoModel.SelectBuilder().Where(squirrel.LtOrEq{"update_time": in.LatestTime})
+	whereBuilder := l.svcCtx.VideoModel.SelectBuilder().Where(squirrel.LtOrEq{"create_time": in.LatestTime})
 	list, err := l.svcCtx.VideoModel.FindPageListByTimeDESC(l.ctx, whereBuilder)
 	if err != nil && err != model.ErrNotFound {
 		return nil, errors.Wrapf(dyerr.ErrDBerror, "Failed to get video list err : %v , in :%+v", err, in)

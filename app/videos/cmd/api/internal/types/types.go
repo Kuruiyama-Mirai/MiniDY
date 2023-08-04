@@ -38,7 +38,6 @@ type VideGetFeedResp struct {
 }
 
 type PublishVideoReq struct {
-	Data  byte   `json:"data"`
 	Title string `json:"title"`
 }
 

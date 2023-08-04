@@ -12,7 +12,11 @@ type Config struct {
 	JwtAuth struct {
 		AccessSecret string
 	}
-	cache cache.CacheConf
+	DB struct {
+		DataSource string
+	}
+
+	Cache cache.CacheConf
 
 	VideoRpcConf zrpc.RpcClientConf
 }

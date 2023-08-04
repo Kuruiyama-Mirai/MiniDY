@@ -3,18 +3,23 @@ package svc
 import (
 	"MiniDY/app/videos/cmd/api/internal/config"
 	"MiniDY/app/videos/cmd/rpc/videoservice"
+	"MiniDY/app/videos/model"
 
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {
-	Config   config.Config
-	VideoRpc videoservice.Videoservice
+	Config     config.Config
+	VideoRpc   videoservice.Videoservice
+	VideoModel model.VideoModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
+	sqlconn := sqlx.NewMysql(c.DB.DataSource)
 	return &ServiceContext{
-		Config:   c,
-		VideoRpc: videoservice.NewVideoservice(zrpc.MustNewClient(c.VideoRpcConf)),
+		Config:     c,
+		VideoRpc:   videoservice.NewVideoservice(zrpc.MustNewClient(c.VideoRpcConf)),
+		VideoModel: model.NewVideoModel(sqlconn, c.Cache),
 	}
 }

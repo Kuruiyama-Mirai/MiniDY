@@ -32,10 +32,13 @@ func NewPublistedListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pub
 
 func (l *PublistedListLogic) PublistedList(req *types.PublishedVideoListReq) (*types.PublishedVideoListResp, error) {
 	// todo: add your logic here and delete this line
-	//从上下文Token拿到UserID
+	//从上下文ctx拿到UserID
 	userId := ctxdata.GetUidFromCtx(l.ctx)
 	if userId != req.AuthorId {
-		return nil, errors.New("当前请求的用户信息并未验证")
+		return &types.PublishedVideoListResp{
+			StatusCode: 1,
+			StatusMsg:  "当前用户未认证",
+		}, nil
 	}
 
 	resp, err := l.svcCtx.VideoRpc.PublishVideoList(l.ctx, &videoservice.DouyinPublishListRequest{

@@ -37,8 +37,8 @@ message douyin_feed_request {
 message douyin_feed_response {
     //int32 status_code = 1; // 状态码，0-成功，其他值-失败
     //optional string status_msg = 2; // 返回状态描述
-    repeated Video video_list = 3; // 视频列表
-    int64 next_time = 4; // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
+    repeated Video video_list = 1; // 视频列表
+    int64 next_time = 2; // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
 }
 
 //视频上传直接在api里写就好了 不用调用rpc反而麻烦
@@ -61,7 +61,7 @@ message douyin_publish_list_request {
 message douyin_publish_list_response {
     //int32 status_code = 1; // 状态码，0-成功，其他值-失败
     //optional string status_msg = 2; // 返回状态描述
-    repeated Video video_list = 3; // 用户发布的视频列表
+    repeated Video video_list = 1; // 用户发布的视频列表
 }
 
 

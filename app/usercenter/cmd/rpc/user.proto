@@ -25,8 +25,8 @@ message douyin_user_login_request {
     string password = 2; // 登录密码
 }
 message douyin_user_login_response {
-    int64 user_id = 3; // 用户id
-    string token = 4; // 用户鉴权token
+    int64 user_id = 1; // 用户id
+    string token = 2; // 用户鉴权token
 }
 
 //用户注册
@@ -36,8 +36,8 @@ message douyin_user_register_request {
 }
 
 message douyin_user_register_response {
-    int64 user_id = 3; // 用户id
-    string token = 4; // 用户鉴权token
+    int64 user_id = 1; // 用户id
+    string token = 2; // 用户鉴权token
 }
 
 //用户详细信息
@@ -47,7 +47,7 @@ message douyin_user_request {
 }
   
 message douyin_user_response {
-    User user = 3; // 用户信息
+    User user = 1; // 用户信息
 }
 
 //获取用户Token

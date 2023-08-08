@@ -89,7 +89,7 @@ func (l *PublishLogic) Publish(req *types.PublishVideoReq, file multipart.File, 
 	//将视频信息保存到数据库中
 	//将数据库的事务处理封装成一个函数调用，通过将 fn 函数作为参数传递给 Trans 方法，可以在 fn 函数中执行一系列的数据库操作，这些操作将在一个事务中执行，并且出现任何错误时，事务将自动回滚。
 	if err := l.svcCtx.VideoModel.Trans(l.ctx, func(ctx context.Context, session sqlx.Session) error {
-		//创建新的视频实例对象
+		//1 修改视频表
 		video := new(model.Video)
 		if req.Title == "" {
 			return errors.New("视频标题不能为空")
@@ -105,11 +105,21 @@ func (l *PublishLogic) Publish(req *types.PublishVideoReq, file multipart.File, 
 		}
 		lastId, err := insertResult.LastInsertId()
 		if err != nil {
-			return errors.Wrapf(dyerr.ErrDBerror, "new video insertResult.LastInsertId err:%v,user:%+v", err, video)
+			return errors.Wrapf(dyerr.ErrDBerror, "new video insertResult.LastInsertId err:%v,video:%+v", err, video)
 		}
 		video.Id = lastId
-		return nil
+		//2 修改用户表 使其作品总数+1
+		userInfo, err := l.svcCtx.UsercenterModel.FindOne(l.ctx, userId)
+		if err != nil {
+			return errors.Wrapf(dyerr.ErrDBerror, "new video find user err:%v,user:%+v", err, userId)
+		}
+		userInfo.WorkCount += 1
+		err = l.svcCtx.UsercenterModel.Update(l.ctx, userInfo)
+		if err != nil {
+			return errors.Wrapf(dyerr.ErrDBerror, "new video update user err:%v,user:%+v", err, userId)
+		}
 
+		return nil
 	}); err != nil {
 		return &types.PublishVideoResp{
 			StatusCode: 1,

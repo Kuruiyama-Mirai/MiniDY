@@ -63,4 +63,5 @@ func (l *FriendsListLogic) FriendsList(req *types.FriendsListReq) (resp *types.F
 		StatusMsg:  "查询好友列表" + dyerr.SUCCESS,
 		UserList:   friendsList,
 	}, nil
+
 }

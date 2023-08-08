@@ -46,9 +46,9 @@ func (l *RegisterLogic) Register(in *pb.DouyinUserRegisterRequest) (*pb.DouyinUs
 		//创建新的用户数据库实例对象
 		user := new(model.User)
 		user.Username = in.Username
-		//对密码加密处理
+		//对密码加密处理 修改为bcyrpt加密
 		if len(in.Password) > 0 {
-			user.Password = tool.Md5ByString(in.Password)
+			user.Password = tool.BcryptByString(in.Password)
 		}
 
 		insertResult, err := l.svcCtx.UserModel.Insert(l.ctx, user)

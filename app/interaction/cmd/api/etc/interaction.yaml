@@ -1,0 +1,40 @@
+Name: interaction
+Host: 0.0.0.0
+Mode: dev
+Port: 8884
+
+JwtAuth:
+  AccessSecret: shushuwoyazhendeyaojile
+
+
+#服务监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 5008
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: interacts-api
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Log:
+  ServiceName: interacts-api
+  Level: error
+
+#数据库
+DB:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/minidy?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+#rpc服务 采用endpoints直连方式
+UsercenterRpcConf:
+  Endpoints:
+    - 127.0.0.1:8080
+  NonBlock: true
+
+InteractsRpcConf:
+  Endpoints:
+    - 127.0.0.1:8083
+  NonBlock: true

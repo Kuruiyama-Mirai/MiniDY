@@ -1,0 +1,120 @@
+syntax = "v1"
+
+info(
+	title: "互动服务"
+	desc: "互动服务"
+	author: "px"
+	email: "1780759836@qq.com"
+	version: "1.0"
+)
+
+type User {
+	Id               int64  `json:"id"`
+	Username         string `json:"username"`
+	Follow_count     int64  `json:"follow_count"`
+	Follower_count   int64  `json:"follower_count"`
+	Is_follow        bool   `json:"is_follow"`
+	Avatar           string `json:"avatar"`
+	Background_image string `json:"background_image"`
+	Signature        string `json:"signature"`
+	Total_favorited  int64  `json:"total_favorited"`
+	Work_count       int64  `json:"work_count"`
+	Favorite_count   int64  `json:"favorite_count"`
+}
+
+type Video {
+	Id             int64  `json:"id"`
+	Author         User   `json:"author"`
+	Play_url       string `json:"play_url"`
+	Cover_url      string `json:"cover_url"`
+	Favorite_count int64  `json:"favorite_count"`
+	Comment_count  int64  `json:"comment_count"`
+	Is_Favorite    bool   `json:"is_favorite"`
+	Title          string `json:"title"`
+}
+
+type Comment {
+	Id          int64  `json:"id"`
+	UserInfo    User   `json:"user"`
+	Content     string `json:"content"`
+	Create_data string `json:"create_data"`
+}
+
+//点赞
+type (
+	InteractionReq {
+		VideoId    int64 `json:"video_id"`
+		ActionType int64 `json:"action_type"`
+	}
+	InteractionResp {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+	}
+)
+//喜欢列表
+type (
+	InteractionListReq {
+		UserId int64 `json:"user_id"`
+	}
+	InteractionListResp {
+		StatusCode int32    `json:"status_code"`
+		StatusMsg  string   `json:"status_msg"`
+		Video_list []*Video `json:"video_list"`
+	}
+)
+
+//评论
+type (
+	CommentActionReq {
+		VideoId     int64  `json:"video_id"`
+		ActionType  int64  `json:"action_type"`
+		CommentText string `json:"comment_text,optional"`
+		CommentId   int64  `json:"comment_id,optional"`
+	}
+	CommentActionResp {
+		StatusCode int32    `json:"status_code"`
+		StatusMsg  string   `json:"status_msg"`
+		Comment    *Comment `json:"comment"`
+	}
+)
+//评论列表
+type (
+	CommentListReq {
+		VideoId int64 `json:"video_id"`
+	}
+	CommentListResp {
+		StatusCode  int32      `json:"status_code"`
+		StatusMsg   string     `json:"status_msg"`
+		CommentList []*Comment `json:"comment_list"`
+	}
+)
+
+@server(
+	prefix: douyin/favorite
+	jwt: JwtAuth
+)
+
+service interaction{
+	//点赞
+	@handler actionLike
+	post /action (InteractionReq) returns(InteractionResp)
+	//点赞列表
+	@handler actionLikeList
+	post /list (InteractionListReq) returns(InteractionListResp)
+	
+}
+
+@server(
+	prefix: douyin/comment
+	jwt: JwtAuth
+)
+
+service interaction{
+	//评论
+	@handler postComment
+	post /action (CommentActionReq) returns(CommentActionResp)
+	//评论列表
+	@handler getCommentList
+	post /list (CommentListReq) returns(CommentListResp)
+	
+}

@@ -1,0 +1,70 @@
+global:
+  scrape_interval: 15s 
+  evaluation_interval: 15s 
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s  #global catch time
+    static_configs:
+      - targets: ['127.0.0.1:9090']
+
+  - job_name: 'usercenter-rpc'
+    static_configs:
+      - targets: [ '127.0.0.1:5001' ]
+        labels:
+          job: usercenter-rpc
+          app: usercenter-rpc
+          env: dev
+  - job_name: 'usercenter-api'
+    static_configs:
+      - targets: [ '127.0.0.1:5002' ]
+        labels:
+          job: usercenter-api
+          app: usercenter-api
+          env: dev
+  
+  - job_name: 'videos-rpc'
+    static_configs:
+      - targets: [ '127.0.0.1:5003' ]
+        labels:
+          job: videos-rpc
+          app: videos-rpc
+          env: dev
+  - job_name: 'videos-api'
+    static_configs:
+      - targets: [ '127.0.0.1:5004' ]
+        labels:
+          job: videos-api
+          app: videos-api
+          env: dev
+
+  - job_name: 'social-rpc'
+    static_configs:
+      - targets: [ '127.0.0.1:5005' ]
+        labels:
+          job: social-rpc
+          app: social-rpc
+          env: dev
+  - job_name: 'social-api'
+    static_configs:
+      - targets: [ '127.0.0.1:5006' ]
+        labels:
+          job: social-api
+          app: social-api
+          env: dev
+  
+  - job_name: 'interaction-rpc'
+    static_configs:
+      - targets: [ '127.0.0.1:5007' ]
+        labels:
+          job: interaction-rpc
+          app: interaction-rpc
+          env: dev
+  - job_name: 'interaction-api'
+    static_configs:
+      - targets: [ '127.0.0.1:5008' ]
+        labels:
+          job: interaction-api
+          app: interaction-api
+          env: dev
+  

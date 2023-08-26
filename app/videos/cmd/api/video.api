@@ -5,7 +5,7 @@ info(
 	desc: "视频服务"
 	author: "px"
 	email: "1780759836@qq.com"
-	version: 1.0
+	version: "1.0"
 )
 
 type User {
@@ -68,7 +68,7 @@ type (
 )
 
 @server(
-	prefix: douyin/
+	prefix: douyin
 )
 service video{
 	
